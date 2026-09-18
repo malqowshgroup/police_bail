@@ -1,0 +1,51 @@
+<div class="flex items-center justify-between gap-3 mb-6">
+    <div>
+        <div class="flex items-center gap-2 text-xs text-slate-400 mb-1">
+            <a href="{{ route('parametres.services.index') }}" class="hover:text-orange-500">Services</a>
+            <i class="ti ti-chevron-right"></i><span>{{ $titre }}</span>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-800">{{ $titre }}</h1>
+    </div>
+    <a href="{{ route('parametres.services.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-gray-100 hover:bg-gray-200 transition"><i class="ti ti-arrow-left text-sm"></i> Retour</a>
+</div>
+
+<form method="POST" action="{{ $action }}" class="max-w-2xl">
+@csrf
+@if($service) @method('PUT') @endif
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Code</label>
+            <input type="text" name="code" value="{{ old('code', $service->code ?? '') }}" placeholder="Ex: DGPN"
+                   class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 {{ $errors->has('code') ? 'border-red-400 bg-red-50' : 'border-gray-200' }}">
+            @error('code')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+        </div>
+        <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Localité</label>
+            <input type="text" name="localite" list="localites-list" value="{{ old('localite', $service->localite ?? '') }}" placeholder="Ex: Abidjan"
+                   class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2">
+            <datalist id="localites-list">
+                @foreach($localites as $lib)<option value="{{ $lib }}">@endforeach
+            </datalist>
+        </div>
+        <div class="md:col-span-2">
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5">Libellé <span class="text-red-500">*</span></label>
+            <input type="text" name="libelle" value="{{ old('libelle', $service->libelle ?? '') }}" placeholder="Ex: Direction Générale de la Police Nationale"
+                   class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 {{ $errors->has('libelle') ? 'border-red-400 bg-red-50' : 'border-gray-200' }}">
+            @error('libelle')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+        </div>
+        <div class="md:col-span-2">
+            <label class="inline-flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="actif" value="0">
+                <input type="checkbox" name="actif" value="1" {{ old('actif', $service->actif ?? true) ? 'checked' : '' }} class="w-4 h-4 rounded accent-orange-500">
+                <span class="text-sm font-medium text-slate-700">Service actif</span>
+            </label>
+        </div>
+    </div>
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+        <a href="{{ route('parametres.services.index') }}" class="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-600 bg-white border border-gray-200 hover:bg-gray-100 transition">Annuler</a>
+        <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition hover:opacity-90" style="background:#F77F00;"><i class="ti ti-check mr-1.5"></i> Enregistrer</button>
+    </div>
+</div>
+</form>
